@@ -820,6 +820,20 @@ namespace py
         }
     };
 
+    inline int convert_to_hstring(PyObject* obj, void* address) noexcept
+    {
+        try
+        {
+            *reinterpret_cast<winrt::hstring*>(address) = converter<winrt::hstring>::convert_to(obj);
+            return 1;
+        }
+        catch (...)
+        {
+            to_PyErr();
+            return 0;
+        }
+    }
+
     template <typename T>
     struct converter<T, typename std::enable_if_t<is_enum_category_v<T>>>
     {
